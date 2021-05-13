@@ -1,7 +1,8 @@
 import org.junit.Test;
 
-import javax.xml.transform.Source;
 import java.util.Arrays;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntUnaryOperator;
 
 public class Chapter04 {
     @Test
@@ -242,6 +243,40 @@ public class Chapter04 {
 
         Arrays.sort(arr4);
         System.out.println("数组arr4的元素" + Arrays.toString(arr4)); // [0, 1, 1, 1, 2, 3]
+
+    }
+
+    @Test
+    public void ArraysTest2() {
+        int[] arr1 = new int[]{12, 45, 23, -23, 14, -34, 56};
+        Arrays.parallelSort(arr1);
+        System.out.println(Arrays.toString(arr1));
+
+        int[] arr2 = new int[]{-3, 5, 4, 12, -4};
+        Arrays.parallelPrefix(arr2, new IntBinaryOperator() {
+            @Override
+            public int applyAsInt(int left, int right) {
+                return left * right;
+            }
+        });
+        System.out.println(Arrays.toString(arr2)); // [-3, -15, -60, -720, 2880]
+
+        int[] arr3 = new int[5];
+        Arrays.parallelSetAll(arr3, new IntUnaryOperator() {
+            @Override
+            public int applyAsInt(int operand) {  // operand索引
+                return operand * 5;
+            }
+        });
+        System.out.println(Arrays.toString(arr3)); // [0, 5, 10, 15, 20]
+
+        Arrays.parallelSetAll(arr1, new IntUnaryOperator() {
+            @Override
+            public int applyAsInt(int operand) {
+                return operand * 2;
+            }
+        });
+        System.out.println(Arrays.toString(arr1));
 
     }
 
